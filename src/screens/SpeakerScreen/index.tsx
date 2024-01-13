@@ -22,7 +22,7 @@ const SpeakerScreen: React.FC<Props> = ({ route }) => {
   useEffect(() => {
     setLoading(true)
     axios
-      .get(`http://localhost:3001/speakers/${speakerId}`)
+      .get(`http://172.20.10.4:3001/speakers/${speakerId}`)
       .then((response) => {
         if (response) {
           setResponse(true)
@@ -36,7 +36,7 @@ const SpeakerScreen: React.FC<Props> = ({ route }) => {
       .catch((error) => {
         console.log('SpeakerError', error)
         setLoading(false)
-        if (!response) setCurrentSpeaker(speakersMock.find((speaker) => speaker.id === speakerId))
+        // if (!response) setCurrentSpeaker(speakersMock.find((speaker) => speaker.id === speakerId))
       })
   }, [])
 
@@ -74,9 +74,9 @@ const SpeakerScreen: React.FC<Props> = ({ route }) => {
       </SpeakerContainer>
     </Container>
   ) : (
-    <View>
+    <Container>
       <Error>{!loading && 'Спикер не найден'}</Error>
-    </View>
+    </Container>
   )
 }
 
@@ -93,10 +93,12 @@ const Container = styled.ScrollView`
   padding: 20px 40px 20px 40px;
   margin: 0 auto;
   width: 100%;
+  background: #fff;
 `
 
 const Error = styled.Text`
   font-size: 16px;
+  margin-top: 20px;
 `
 
 const SpeakerContainer = styled.View`
@@ -122,6 +124,7 @@ const ContactsContainer = styled.View`
   background: white;
   margin-top: 20px;
   width: 310px;
+  border: 1px solid #dfdfdf;
 `
 
 const Contacts = styled.View`

@@ -31,7 +31,7 @@ const SArrowRight = styled(ArrowRight)`
 
 const Container = styled.View`
   flex-direction: row;
-  background: #f7f7f7;
+  background: #fff;
   border-radius: 15px;
   width: auto;
   z-index: 1;

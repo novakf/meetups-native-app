@@ -7,9 +7,9 @@ const HomeIcon: React.FC = () => {
       <Path
         d="M19 10L19 20H9M5 20L5 10L12 3L15.5 6.5"
         stroke="#000000"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </Svg>
   )

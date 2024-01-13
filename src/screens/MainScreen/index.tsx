@@ -5,21 +5,27 @@ import axios from 'axios'
 import styled from 'styled-components/native'
 import { Link } from '@react-navigation/native'
 import SearchIcon from '../../icons/SearchIcon'
-import { Button, TouchableHighlight, View } from 'react-native'
+import { TouchableHighlight, View } from 'react-native'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import HomeIcon from '../../icons/HomeIcon'
+import { filterData, setFilterAction } from '../../store/slices/filterSlice'
+import { useDispatch } from 'react-redux'
 
 const MainScreen: React.FC = () => {
+  const dispatch = useDispatch()
+  const filter = filterData()
+
   const [speakers, setSpeakers] = useState<SpeakerType[]>([])
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState(false)
-  const [company, setCompany] = useState('')
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState(filter.company)
+
+  console.log(filter)
 
   useEffect(() => {
     setLoading(true)
     axios
-      .get(`http://localhost:3001/speakers/?company=${company}`)
+      .get(`http://172.20.10.4:3001/speakers/?company=${filter.company}`)
       .then((response) => {
         if (!response) {
           setResponse(true)
@@ -32,9 +38,16 @@ const MainScreen: React.FC = () => {
       })
       .catch((error) => {
         console.log(error)
-        if (!response) setSpeakers(speakersMock)
+        // if (!response) setSpeakers(speakersMock)
       })
-  }, [])
+  }, [filter])
+
+  const handleOrgEnter = (event: any) => {
+    let value = (event.target as HTMLInputElement).value
+    if (event.key === 'Enter') {
+      dispatch(setFilterAction(value))
+    }
+  }
 
   return (
     <Container>
@@ -43,11 +56,16 @@ const MainScreen: React.FC = () => {
         <Link to={{ screen: 'Main' }}>Спикеры</Link>
       </Breadcrumbs>
       <SearchContainer>
-        <TextInput placeholder="Введите название компании" value={searchValue} onChangeText={setSearchValue} />
+        <TextInput
+          placeholder="Введите название компании"
+          value={searchValue}
+          onChangeText={setSearchValue}
+          onKeyPress={handleOrgEnter}
+        />
         <TouchableHighlight
           underlayColor="transparent"
           style={{ width: 24, height: 24 }}
-          onPress={() => setCompany(searchValue)}
+          onPress={() => dispatch(setFilterAction(searchValue))}
         >
           <View>
             <SearchIcon />
@@ -58,8 +76,8 @@ const MainScreen: React.FC = () => {
         <SpeakersContainer>
           {speakers.map((speaker) => {
             return (
-              (speaker.organization?.toLocaleLowerCase().includes(company.toLocaleLowerCase()) ||
-                (!company && !speaker.organization)) && (
+              (speaker.organization?.toLocaleLowerCase().includes(filter.company.toLocaleLowerCase()) ||
+                (!filter.company && !speaker.organization)) && (
                 <Link key={speaker.id} to={{ screen: 'Speaker', params: { speakerId: speaker.id } }}>
                   <SpeakerCard>
                     <ImageContainer>
@@ -84,7 +102,7 @@ const MainScreen: React.FC = () => {
 
 const SearchContainer = styled.View`
   width: 100%;
-  justify-content: center;
+  justify-content: space-between;
   flex-direction: row;
   align-items: center;
   gap: 10px;
@@ -104,6 +122,7 @@ const NotFound = styled.Text`
   text-align: center;
   font-size: 16px;
   color: #525252;
+  margin-top: 20px;
 `
 
 const Info = styled.Text`
@@ -148,6 +167,7 @@ const Container = styled.ScrollView`
   padding: 20px 40px 20px 40px;
   margin: 0 auto;
   width: 100%;
+  background: #fff;
 `
 
 export default MainScreen
