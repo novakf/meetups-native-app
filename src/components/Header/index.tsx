@@ -12,7 +12,9 @@ const Header: React.FC = () => {
           <LogoImg source={logo as any} />
         </Link>
         <Column>|</Column>
-        <Text style={{ fontSize: 20 }}>Митапы.</Text>
+        <Link to={{ screen: 'Main' }}>
+          <Text style={{ fontSize: 20 }}>Митапы.</Text>
+        </Link>
       </Content>
     </Container>
   )

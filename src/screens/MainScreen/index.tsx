@@ -10,6 +10,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import HomeIcon from '../../icons/HomeIcon'
 import { filterData, setFilterAction } from '../../store/slices/filterSlice'
 import { useDispatch } from 'react-redux'
+import { IPAddress } from '../../constants'
 
 const MainScreen: React.FC = () => {
   const dispatch = useDispatch()
@@ -25,7 +26,7 @@ const MainScreen: React.FC = () => {
   useEffect(() => {
     setLoading(true)
     axios
-      .get(`http://172.20.10.4:3001/speakers/?company=${filter.company}`)
+      .get(`http://${IPAddress}:3001/speakers/?company=${filter.company}`)
       .then((response) => {
         if (!response) {
           setResponse(true)
@@ -81,7 +82,7 @@ const MainScreen: React.FC = () => {
                 <Link key={speaker.id} to={{ screen: 'Speaker', params: { speakerId: speaker.id } }}>
                   <SpeakerCard>
                     <ImageContainer>
-                      <Avatar source={speaker.avatarImg as any} />
+                      <Avatar source={speaker.avatarImg.replace('localhost', IPAddress) as any} />
                     </ImageContainer>
                     <Content>
                       <Name>{speaker.name}</Name>

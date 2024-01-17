@@ -1,12 +1,12 @@
 import { Link, RouteProp } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { SpeakerType } from '../../types'
 import axios from 'axios'
-import speakersMock from '../../mocks/speakers'
 import styled from 'styled-components/native'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import HomeIcon from '../../icons/HomeIcon'
+import { IPAddress } from '../../constants'
 
 type Props = {
   route: RouteProp<{ params: { speakerId: number } }, 'params'>
@@ -50,7 +50,7 @@ const SpeakerScreen: React.FC<Props> = ({ route }) => {
       <SpeakerContainer>
         <Banner>
           <AvatarContainer>
-            <Avatar source={currentSpeaker.avatarImg as any} />
+            <Avatar source={currentSpeaker.avatarImg.replace('localhost', IPAddress) as any} />
           </AvatarContainer>
           <MainInfo>
             <Name>{currentSpeaker.name}</Name>
